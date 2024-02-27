@@ -1,13 +1,11 @@
 package htl.steyr.ereader;
 
-import org.springframework.boot.SpringApplication;
+import javafx.application.Application;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class EReaderApplication {
-
   public static void main(String[] args) {
-    SpringApplication.run(EReaderApplication.class, args);
+    Application.launch(JavaFxApplication.class, args);
   }
-
 }
