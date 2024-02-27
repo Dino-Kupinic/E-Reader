@@ -6,9 +6,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * <h4>Customer</h4>
+ * <h4>Resource Category</h4>
  * <br>
- * Represents a customer which can borrow resources.
+ * Represents a category that can belong to one or multiple resources.
+ * A category example would be "Action", "Roman" or "Fantasy"
  *
  * @author Dino Kupinic
  */
@@ -16,17 +17,14 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
-@Table(name = "customer")
-public class Customer {
+@Table(name = "category")
+public class Category {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "first_name", nullable = false)
-  private String firstName;
-
-  @Column(name = "last_name", nullable = false)
-  private String lastName;
+  @Column(name = "name", nullable = false)
+  private String name;
 
   // TODO: Add relations
 }

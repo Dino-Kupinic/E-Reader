@@ -18,13 +18,11 @@ public class JavaFxApplication extends Application {
   public void init() throws Exception {
     String[] args = new String[0];
 
-    springContext =
-      new SpringApplicationBuilder().
-        sources(EReaderApplication.class).
-        run(args);
+    springContext = new SpringApplicationBuilder()
+      .sources(EReaderApplication.class)
+      .run(args);
 
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("scene.fxml"));
-
     fxmlLoader.setControllerFactory(springContext::getBean);
     root = fxmlLoader.load();
   }
