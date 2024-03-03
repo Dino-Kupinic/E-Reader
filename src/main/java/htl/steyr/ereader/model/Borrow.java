@@ -31,5 +31,11 @@ public class Borrow {
   @Column(name = "end_date", nullable = false)
   private Date endDate;
 
-  // TODO: Add relations
+  @ManyToOne
+  @JoinColumn(name = "customer_id")
+  private Customer customer;
+
+  @ManyToOne
+  @JoinColumn(name = "resource_id")
+  private Resource resource;
 }

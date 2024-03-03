@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * <h4>Customer</h4>
  * <br>
@@ -28,5 +30,6 @@ public class Customer {
   @Column(name = "last_name", nullable = false)
   private String lastName;
 
-  // TODO: Add relations
+  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Borrow> borrowList;
 }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * <h4>Resource</h4>
  * <br>
@@ -25,5 +27,14 @@ public class Resource {
   @Column(name = "name", nullable = false)
   private String name;
 
-  // TODO: Add relations
+  @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Borrow> borrowList;
+
+  @ManyToOne
+  @JoinColumn(name = "category_id")
+  private Category category;
+
+  @ManyToOne
+  @JoinColumn(name = "type_id")
+  private Type type;
 }
