@@ -10,6 +10,7 @@ package htl.steyr.ereader.model;
 public interface PublisherInterface {
   /**
    * Add Subscriber to Publisher List of Subscribers
+   *
    * @param sub Subscriber
    */
   void addSubscriber(SubscriberInterface sub);

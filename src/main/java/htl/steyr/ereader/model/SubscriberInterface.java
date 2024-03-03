@@ -10,8 +10,8 @@ package htl.steyr.ereader.model;
 public interface SubscriberInterface {
   /**
    * Trigger Action for Subscribers
+   *
    * @author Dino Kupinic
    */
   void triggerAction();
 }
-
