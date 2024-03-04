@@ -32,6 +32,10 @@ public class Borrow {
   @NonNull
   private Date endDate;
 
+  @Column(name = "is_returned", nullable = false)
+  @NonNull
+  private Boolean isReturned;
+
   @ManyToOne
   @JoinColumn(name = "customer_id")
   private Customer customer;
