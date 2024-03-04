@@ -1,6 +1,7 @@
 package htl.steyr.ereader.model;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Enum for the CRUD operations.
@@ -8,6 +9,7 @@ import lombok.Getter;
  * @author Dino Kupinic
  */
 @Getter
+@RequiredArgsConstructor
 public enum Operation {
   // TODO: Add Borrow
   // Customer
@@ -34,8 +36,4 @@ public enum Operation {
    * Filename of the FXML file.
    */
   private final String fileName;
-
-  Operation(String fileName) {
-    this.fileName = fileName;
-  }
 }

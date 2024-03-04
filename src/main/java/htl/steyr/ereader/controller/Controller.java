@@ -1,6 +1,7 @@
 package htl.steyr.ereader.controller;
 
 import htl.steyr.ereader.JavaFxApplication;
+import htl.steyr.ereader.model.Customer;
 import htl.steyr.ereader.model.Operation;
 import htl.steyr.ereader.model.PublisherInterface;
 import htl.steyr.ereader.model.SubscriberInterface;
@@ -22,7 +23,6 @@ public class Controller implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-
   }
 
   public void createOperationWindow(Operation operation, SubscriberInterface sub) throws IOException {

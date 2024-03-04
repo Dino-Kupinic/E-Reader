@@ -1,9 +1,7 @@
 package htl.steyr.ereader.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,7 +14,8 @@ import java.util.List;
  */
 @Getter
 @Setter
-@ToString
+@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "resource")
 public class Resource {
@@ -25,7 +24,12 @@ public class Resource {
   private Long id;
 
   @Column(name = "name", nullable = false)
+  @NonNull
   private String name;
+
+  @Column(name = "daily_rate", nullable = false)
+  @NonNull
+  private Double dailyRate;
 
   @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Borrow> borrowList;

@@ -1,9 +1,7 @@
 package htl.steyr.ereader.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
 
@@ -17,7 +15,8 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@ToString
+@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "borrow")
 public class Borrow {
@@ -26,9 +25,11 @@ public class Borrow {
   private Long id;
 
   @Column(name = "start_date", nullable = false)
+  @NonNull
   private Date startDate;
 
   @Column(name = "end_date", nullable = false)
+  @NonNull
   private Date endDate;
 
   @ManyToOne
