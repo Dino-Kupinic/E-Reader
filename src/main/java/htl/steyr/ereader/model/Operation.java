@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Operation {
-  // TODO: Add Borrow
   // Customer
   CREATE_CUSTOMER("customer/create.fxml"),
   EDIT_CUSTOMER("customer/edit.fxml"),

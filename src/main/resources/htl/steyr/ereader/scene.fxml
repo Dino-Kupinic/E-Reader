@@ -13,28 +13,28 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="htl.steyr.ereader.controller.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="htl.steyr.ereader.controller.Controller">
     <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Menu mnemonicParsing="false" text="Customers">
             <MenuItem mnemonicParsing="false" onAction="#manageCustomers" text="Create" />
-            <MenuItem mnemonicParsing="false" text="Edit" />
-            <MenuItem mnemonicParsing="false" text="Remove" />
+            <MenuItem mnemonicParsing="false" onAction="#manageCustomers" text="Edit" />
+            <MenuItem mnemonicParsing="false" onAction="#manageCustomers" text="Remove" />
         </Menu>
         <Menu mnemonicParsing="false" text="Category">
             <MenuItem mnemonicParsing="false" text="Create" />
             <MenuItem mnemonicParsing="false" text="Edit" />
             <MenuItem mnemonicParsing="false" text="Remove" />
-            <Menu mnemonicParsing="false" text="Manage Types">
-                <MenuItem mnemonicParsing="false" text="Create" />
-                <MenuItem mnemonicParsing="false" text="Edit" />
-                <MenuItem mnemonicParsing="false" text="Remove" />
-            </Menu>
         </Menu>
         <Menu mnemonicParsing="false" text="Resources">
             <MenuItem mnemonicParsing="false" text="Create" />
             <MenuItem mnemonicParsing="false" text="Edit" />
             <MenuItem mnemonicParsing="false" text="Remove" />
         </Menu>
+         <Menu mnemonicParsing="false" text="Types">
+             <MenuItem mnemonicParsing="false" text="Create" />
+             <MenuItem mnemonicParsing="false" text="Edit" />
+             <MenuItem mnemonicParsing="false" text="Remove" />
+         </Menu>
         <Menu mnemonicParsing="false" text="Help" />
     </MenuBar>
     <Label layoutX="14.0" layoutY="31.0" text="List of Borrows">
