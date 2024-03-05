@@ -30,4 +30,9 @@ public class Category {
 
   @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Resource> resourceList;
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

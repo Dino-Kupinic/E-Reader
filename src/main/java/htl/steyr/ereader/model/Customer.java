@@ -33,4 +33,9 @@ public class Customer {
 
   @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Borrow> borrowList;
+
+  @Override
+  public String toString() {
+    return getFirstName() + " " + getLastName();
+  }
 }
