@@ -36,9 +36,11 @@ public class Resource {
 
   @ManyToOne
   @JoinColumn(name = "category_id")
+  @NonNull
   private Category category;
 
   @ManyToOne
   @JoinColumn(name = "type_id")
+  @NonNull
   private Type type;
 }

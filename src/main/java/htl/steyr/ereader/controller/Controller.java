@@ -89,4 +89,24 @@ public class Controller implements Initializable {
         break;
     }
   }
+
+  public void manageResources(ActionEvent actionEvent) throws IOException {
+    String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
+    SubscriberInterface sub = () -> {
+      borrowTable.getItems().clear();
+      borrowTable.getItems().addAll(borrowRepository.findAll());
+      // TODO: clear details view
+    };
+    switch (menuItemText) {
+      case "CREATE":
+        createOperationWindow(Operation.CREATE_RESOURCE, sub);
+        break;
+      case "EDIT":
+        createOperationWindow(Operation.EDIT_RESOURCE, sub);
+        break;
+      case "REMOVE":
+        createOperationWindow(Operation.REMOVE_RESOURCE, sub);
+        break;
+    }
+  }
 }
