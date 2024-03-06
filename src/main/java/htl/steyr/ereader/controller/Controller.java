@@ -109,4 +109,44 @@ public class Controller implements Initializable {
         break;
     }
   }
+
+  public void manageCategories(ActionEvent actionEvent) throws IOException {
+    String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
+    SubscriberInterface sub = () -> {
+      borrowTable.getItems().clear();
+      borrowTable.getItems().addAll(borrowRepository.findAll());
+      // TODO: clear details view
+    };
+    switch (menuItemText) {
+      case "CREATE":
+        createOperationWindow(Operation.CREATE_CATEGORY, sub);
+        break;
+      case "EDIT":
+        createOperationWindow(Operation.EDIT_CATEGORY, sub);
+        break;
+      case "REMOVE":
+        createOperationWindow(Operation.REMOVE_CATEGORY, sub);
+        break;
+    }
+  }
+
+  public void manageTypes(ActionEvent actionEvent) throws IOException {
+    String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
+    SubscriberInterface sub = () -> {
+      borrowTable.getItems().clear();
+      borrowTable.getItems().addAll(borrowRepository.findAll());
+      // TODO: clear details view
+    };
+    switch (menuItemText) {
+      case "CREATE":
+        createOperationWindow(Operation.CREATE_TYPE, sub);
+        break;
+      case "EDIT":
+        createOperationWindow(Operation.EDIT_TYPE, sub);
+        break;
+      case "REMOVE":
+        createOperationWindow(Operation.REMOVE_TYPE, sub);
+        break;
+    }
+  }
 }

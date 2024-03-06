@@ -1,8 +1,10 @@
-package htl.steyr.ereader.controller.resource;
+package htl.steyr.ereader.controller.category;
 
+import htl.steyr.ereader.model.Category;
 import htl.steyr.ereader.model.Customer;
 import htl.steyr.ereader.model.PublisherInterface;
 import htl.steyr.ereader.model.SubscriberInterface;
+import htl.steyr.ereader.repository.CategoryRepository;
 import htl.steyr.ereader.repository.CustomerRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
@@ -18,15 +20,16 @@ import java.util.ResourceBundle;
 
 @RequiredArgsConstructor
 @Component
-public class CustomerRemoveController implements Initializable, PublisherInterface {
-  public ListView<Customer> deleteCustomerList;
+public class CategoryRemoveController implements Initializable, PublisherInterface {
   public TextField selectedText;
+  public ListView<Category> deleteCategoryList;
+
   private SubscriberInterface subscriber = null;
-  private final CustomerRepository customerRepository;
+  private final CategoryRepository categoryRepository;
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    deleteCustomerList.getItems().addAll(customerRepository.findAll());
+    deleteCategoryList.getItems().addAll(categoryRepository.findAll());
   }
 
   @Override
@@ -35,9 +38,9 @@ public class CustomerRemoveController implements Initializable, PublisherInterfa
   }
 
   public void onDeleteClicked(ActionEvent actionEvent) {
-    Customer c = deleteCustomerList.getSelectionModel().getSelectedItem();
+    Category c = deleteCategoryList.getSelectionModel().getSelectedItem();
     if (c != null) {
-      customerRepository.delete(c);
+      categoryRepository.delete(c);
       subscriber.triggerAction();
       FxUtilities.closeWindow(actionEvent);
     }
@@ -48,9 +51,9 @@ public class CustomerRemoveController implements Initializable, PublisherInterfa
   }
 
   public void customerListViewClicked(MouseEvent event) {
-    Customer c = deleteCustomerList.getSelectionModel().getSelectedItem();
+    Category c = deleteCategoryList.getSelectionModel().getSelectedItem();
     if (c != null) {
-      selectedText.setText(c.toString());
+      selectedText.setText(c.getName());
     }
   }
 }

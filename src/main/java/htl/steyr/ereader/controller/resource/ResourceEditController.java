@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 
 @RequiredArgsConstructor
 @Component
-public class CustomerEditController implements Initializable, PublisherInterface {
+public class ResourceEditController implements Initializable, PublisherInterface {
   public TextField firstNameInput;
   public TextField lastNameInput;
   public ListView<Customer> editCustomerList;

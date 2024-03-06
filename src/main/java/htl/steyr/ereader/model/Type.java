@@ -31,4 +31,9 @@ public class Type {
 
   @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Resource> resourceList;
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

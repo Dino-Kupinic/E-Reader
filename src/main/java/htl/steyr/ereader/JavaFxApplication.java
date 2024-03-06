@@ -5,12 +5,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class JavaFxApplication extends Application {
   private static final String APPLICATION_TITLE = "E-Reader";
 
+  @Getter
   private static ConfigurableApplicationContext springContext;
   private Parent root;
 
@@ -33,10 +35,6 @@ public class JavaFxApplication extends Application {
     Scene scene = new Scene(root, 1280, 720);
     primaryStage.setScene(scene);
     primaryStage.show();
-  }
-
-  public static ConfigurableApplicationContext getSpringContext() {
-    return springContext;
   }
 
   @Override

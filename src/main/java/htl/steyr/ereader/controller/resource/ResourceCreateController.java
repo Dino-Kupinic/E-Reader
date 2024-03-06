@@ -20,8 +20,8 @@ import java.util.ResourceBundle;
 public class ResourceCreateController implements Initializable, PublisherInterface {
   public TextField nameInput;
   public TextField dailyRate;
-  public ComboBox<Category> categoryComboBox;
   public ComboBox<Type> typeCombobox;
+  public ComboBox<Category> categoryCombobox;
 
   private SubscriberInterface subscriber = null;
   private final ResourceRepository resourceRepository;
@@ -30,7 +30,7 @@ public class ResourceCreateController implements Initializable, PublisherInterfa
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    categoryComboBox.getItems().addAll(categoryRepository.findAll());
+    categoryCombobox.getItems().addAll(categoryRepository.findAll());
     typeCombobox.getItems().addAll(typeRepository.findAll());
   }
 
@@ -43,7 +43,7 @@ public class ResourceCreateController implements Initializable, PublisherInterfa
     Resource resource = new Resource(
       nameInput.getText().trim(),
       Double.parseDouble(dailyRate.getText().trim()),
-      categoryComboBox.getValue(),
+      categoryCombobox.getValue(),
       typeCombobox.getValue()
     );
     this.resourceRepository.save(resource);
