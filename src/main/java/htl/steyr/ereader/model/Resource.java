@@ -43,4 +43,9 @@ public class Resource {
   @JoinColumn(name = "type_id")
   @NonNull
   private Type type;
+
+  @Override
+  public String toString() {
+    return getName();
+  }
 }

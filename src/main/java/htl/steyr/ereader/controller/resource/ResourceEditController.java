@@ -1,12 +1,14 @@
 package htl.steyr.ereader.controller.resource;
 
-import htl.steyr.ereader.model.Customer;
-import htl.steyr.ereader.model.PublisherInterface;
-import htl.steyr.ereader.model.SubscriberInterface;
+import htl.steyr.ereader.model.*;
+import htl.steyr.ereader.repository.CategoryRepository;
 import htl.steyr.ereader.repository.CustomerRepository;
+import htl.steyr.ereader.repository.ResourceRepository;
+import htl.steyr.ereader.repository.TypeRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -19,22 +21,30 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class ResourceEditController implements Initializable, PublisherInterface {
-  public TextField firstNameInput;
-  public TextField lastNameInput;
-  public ListView<Customer> editCustomerList;
+  public ListView<Resource> editResourceList;
+  public ComboBox<Category> categoryComboBox;
+  public ComboBox<Type> typeComboBox;
+  public TextField nameInput;
+  public TextField dailyRateInput;
 
   private SubscriberInterface subscriber = null;
-  private final CustomerRepository customerRepository;
+  private final ResourceRepository resourceRepository;
+  private final CategoryRepository categoryRepository;
+  private final TypeRepository typeRepository;
 
   public void saveClicked(ActionEvent actionEvent) {
-    Customer c = editCustomerList.getSelectionModel().getSelectedItem();
-    if (c != null) {
-      c.setFirstName(firstNameInput.getText());
-      c.setLastName(lastNameInput.getText());
-      customerRepository.save(c);
+    Resource r = editResourceList.getSelectionModel().getSelectedItem();
+
+    if (r != null) {
+      r.setName(nameInput.getText());
+      r.setDailyRate(Double.parseDouble(dailyRateInput.getText()));
+      r.setCategory(categoryComboBox.getSelectionModel().getSelectedItem());
+      r.setType(typeComboBox.getSelectionModel().getSelectedItem());
+
+      resourceRepository.save(r);
       subscriber.triggerAction();
-      FxUtilities.closeWindow(actionEvent);
     }
+    FxUtilities.closeWindow(actionEvent);
   }
 
   public void cancelClicked(ActionEvent actionEvent) {
@@ -43,7 +53,7 @@ public class ResourceEditController implements Initializable, PublisherInterface
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    editCustomerList.getItems().addAll(customerRepository.findAll());
+    editResourceList.getItems().addAll(resourceRepository.findAll());
   }
 
   @Override
@@ -51,11 +61,16 @@ public class ResourceEditController implements Initializable, PublisherInterface
     this.subscriber = sub;
   }
 
-  public void customerListViewClicked(MouseEvent mouseEvent) {
-    Customer c = editCustomerList.getSelectionModel().getSelectedItem();
-    if (c != null) {
-      firstNameInput.setText(c.getFirstName());
-      lastNameInput.setText(c.getLastName());
+  public void editResourceListClicked(MouseEvent mouseEvent) {
+    Resource r = editResourceList.getSelectionModel().getSelectedItem();
+
+    if (r != null) {
+      nameInput.setText(r.getName());
+      dailyRateInput.setText(String.valueOf(r.getDailyRate()));
+      categoryComboBox.getItems().addAll(categoryRepository.findAll());
+      categoryComboBox.getSelectionModel().select(r.getCategory());
+      typeComboBox.getItems().addAll(typeRepository.findAll());
+      typeComboBox.getSelectionModel().select(r.getType());
     }
   }
 }
