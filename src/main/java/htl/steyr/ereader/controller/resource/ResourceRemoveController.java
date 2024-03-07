@@ -2,8 +2,10 @@ package htl.steyr.ereader.controller.resource;
 
 import htl.steyr.ereader.model.Customer;
 import htl.steyr.ereader.model.PublisherInterface;
+import htl.steyr.ereader.model.Resource;
 import htl.steyr.ereader.model.SubscriberInterface;
 import htl.steyr.ereader.repository.CustomerRepository;
+import htl.steyr.ereader.repository.ResourceRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -19,14 +21,17 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class ResourceRemoveController implements Initializable, PublisherInterface {
-  public ListView<Customer> deleteCustomerList;
   public TextField selectedText;
+  public ListView<Resource> deleteResourceList;
+  public TextField selectedCategory;
+  public TextField selectedType;
+
   private SubscriberInterface subscriber = null;
-  private final CustomerRepository customerRepository;
+  private final ResourceRepository resourceRepository;
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    deleteCustomerList.getItems().addAll(customerRepository.findAll());
+    deleteResourceList.getItems().addAll(resourceRepository.findAll());
   }
 
   @Override
@@ -35,12 +40,12 @@ public class ResourceRemoveController implements Initializable, PublisherInterfa
   }
 
   public void onDeleteClicked(ActionEvent actionEvent) {
-    Customer c = deleteCustomerList.getSelectionModel().getSelectedItem();
-    if (c != null) {
-      customerRepository.delete(c);
+    Resource r = deleteResourceList.getSelectionModel().getSelectedItem();
+    if (r != null) {
+      resourceRepository.delete(r);
       subscriber.triggerAction();
-      FxUtilities.closeWindow(actionEvent);
     }
+    FxUtilities.closeWindow(actionEvent);
   }
 
   public void onCancelClicked(ActionEvent actionEvent) {
@@ -48,9 +53,11 @@ public class ResourceRemoveController implements Initializable, PublisherInterfa
   }
 
   public void customerListViewClicked(MouseEvent event) {
-    Customer c = deleteCustomerList.getSelectionModel().getSelectedItem();
-    if (c != null) {
-      selectedText.setText(c.toString());
+    Resource r = deleteResourceList.getSelectionModel().getSelectedItem();
+    if (r != null) {
+      selectedText.setText(r.getName());
+      selectedCategory.setText(r.getCategory().getName());
+      selectedType.setText(r.getType().getName());
     }
   }
 }
