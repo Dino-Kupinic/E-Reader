@@ -6,6 +6,9 @@ import htl.steyr.ereader.repository.BorrowRepository;
 import htl.steyr.ereader.repository.CustomerRepository;
 import htl.steyr.ereader.repository.ResourceRepository;
 import htl.steyr.ereader.util.FxUtilities;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,28 +34,35 @@ public class Controller implements Initializable {
   public TextField detailsResourceName;
   public TextField detailsResourceCategory;
   public TextField detailsResourceType;
-  public ComboBox<Customer> borrowCreateCustomer;
-  public ComboBox<Resource> borrowCreateResource;
   public DatePicker borrowCreateStart;
   public DatePicker borrowCreateEnd;
-  public Button borrowEditConfirm;
-  public Button borrowEditCancel;
-  public Button borrowCreateButton;
-  public Button borrowCreateCancel;
-  public Button borrowReturn;
   public TableView<Borrow> borrowTable;
   public TableColumn<Borrow, Long> borrowTableId;
   public TableColumn<Borrow, String> borrowTableResource;
   public TableColumn<Borrow, Date> borrowTableStart;
   public TableColumn<Borrow, Date> borrowTableEnd;
   public TableColumn<Borrow, Boolean> borrowTableIsReturned;
+  public TableView<Resource> resourceTable;
+  public TableColumn<Resource, String> resourceTableResource;
+  public TableColumn<Resource, Category> resourceTableCategory;
+  public TableColumn<Resource, Type> resourceTableType;
 
   private final BorrowRepository borrowRepository;
   private final CustomerRepository customerRepository;
   private final ResourceRepository resourceRepository;
 
   @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {}
+  public void initialize(URL url, ResourceBundle resourceBundle) {
+    borrowTableId.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));
+
+    borrowTableResource.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getResource().getName()));
+    borrowTableStart.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getStartDate()));
+    borrowTableEnd.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getEndDate()));
+    borrowTableIsReturned.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().getIsReturned()));
+
+
+    borrowTable.getItems().addAll(borrowRepository.findAll());
+  }
 
   public void createOperationWindow(Operation operation, SubscriberInterface sub) throws IOException {
     FXMLLoader loader = new FXMLLoader(getClass().getResource(operation.getFileName()));
@@ -149,4 +159,10 @@ public class Controller implements Initializable {
         break;
     }
   }
+
+  public void borrowEditConfirmClicked(ActionEvent actionEvent) {}
+
+  public void borrowEditCancelClicked(ActionEvent actionEvent) {}
+
+  public void borrowReturnClicked(ActionEvent actionEvent) {}
 }
