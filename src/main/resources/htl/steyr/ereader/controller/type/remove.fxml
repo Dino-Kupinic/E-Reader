@@ -11,7 +11,7 @@
             fx:controller="htl.steyr.ereader.controller.type.TypeRemoveController">
   <ListView fx:id="deleteTypeList" layoutX="14.0" layoutY="27.0" onMouseClicked="#typeListViewClicked"
             prefHeight="359.0" prefWidth="200.0"/>
-  <Label layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="123.0" text="Delete Category"/>
+  <Label layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="123.0" text="Delete Type"/>
   <Button layoutX="221.0" layoutY="86.0" mnemonicParsing="false" onAction="#onDeleteClicked" text="Delete"/>
   <Button layoutX="285.0" layoutY="86.0" mnemonicParsing="false" onAction="#onCancelClicked" text="Cancel"/>
   <Label layoutX="223.0" layoutY="27.0" prefHeight="17.0" prefWidth="123.0" text="Selected"/>
