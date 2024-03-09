@@ -1,6 +1,7 @@
 package htl.steyr.ereader.util;
 
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
@@ -46,5 +47,18 @@ public class FxUtilities {
     Button button = (Button) (e.getSource());
     Stage stage = (Stage) button.getScene().getWindow();
     stage.close();
+  }
+
+  /**
+   * Create an error window with the specified message.
+   *
+   * @param message String
+   */
+  public static void createErrorWindow(String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Error");
+    alert.setHeaderText("Error occured");
+    alert.setContentText(message);
+    alert.showAndWait();
   }
 }
