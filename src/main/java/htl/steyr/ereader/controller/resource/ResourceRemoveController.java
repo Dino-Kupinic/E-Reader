@@ -1,10 +1,8 @@
 package htl.steyr.ereader.controller.resource;
 
-import htl.steyr.ereader.model.Customer;
 import htl.steyr.ereader.model.PublisherInterface;
 import htl.steyr.ereader.model.Resource;
 import htl.steyr.ereader.model.SubscriberInterface;
-import htl.steyr.ereader.repository.CustomerRepository;
 import htl.steyr.ereader.repository.ResourceRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;

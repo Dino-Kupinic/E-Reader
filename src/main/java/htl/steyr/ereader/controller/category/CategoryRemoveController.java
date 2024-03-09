@@ -1,11 +1,9 @@
 package htl.steyr.ereader.controller.category;
 
 import htl.steyr.ereader.model.Category;
-import htl.steyr.ereader.model.Customer;
 import htl.steyr.ereader.model.PublisherInterface;
 import htl.steyr.ereader.model.SubscriberInterface;
 import htl.steyr.ereader.repository.CategoryRepository;
-import htl.steyr.ereader.repository.CustomerRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;

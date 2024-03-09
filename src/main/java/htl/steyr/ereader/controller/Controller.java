@@ -1,7 +1,6 @@
 package htl.steyr.ereader.controller;
 
 import htl.steyr.ereader.JavaFxApplication;
-import htl.steyr.ereader.controller.borrow.BorrowCreateController;
 import htl.steyr.ereader.model.*;
 import htl.steyr.ereader.repository.BorrowRepository;
 import htl.steyr.ereader.repository.CustomerRepository;
@@ -55,6 +54,8 @@ public class Controller implements Initializable {
   public TableColumn<Resource, Category> resourceTableCategory;
   public TableColumn<Resource, Type> resourceTableType;
   public ListView<Customer> returnBorrowList;
+  public ListView<Borrow> returnBorrowOpenBorrows;
+  public Label priceLabel;
 
   private final BorrowRepository borrowRepository;
   private final CustomerRepository customerRepository;
@@ -282,7 +283,12 @@ public class Controller implements Initializable {
     detailsResourceType.setDisable(true);
   }
 
-  public void borrowReturnClicked(ActionEvent actionEvent) {}
+  public void borrowReturnClicked(ActionEvent actionEvent) {
+    Customer c = returnBorrowList.getSelectionModel().getSelectedItem();
+    if (c != null) {
+
+    }
+  }
 
   public void calculateAvailableDates(ActionEvent actionEvent) {
     LocalDate startDate = borrowCreateStart.getValue();
@@ -357,6 +363,18 @@ public class Controller implements Initializable {
       detailsResourceName.setText(r.getName());
       detailsResourceCategory.setText(r.getCategory().getName());
       detailsResourceType.setText(r.getType().getName());
+    }
+  }
+
+  public void handleOpenBorrowsClicked(MouseEvent mouseEvent) {
+
+  }
+
+  public void handleReturnBorrowListClicked(MouseEvent mouseEvent) {
+    Customer c = returnBorrowList.getSelectionModel().getSelectedItem();
+    if (c != null) {
+      returnBorrowOpenBorrows.getItems().clear();
+      returnBorrowOpenBorrows.getItems().addAll(borrowRepository.findByCustomerAndIsReturned(c, false));
     }
   }
 }

@@ -2,7 +2,6 @@ package htl.steyr.ereader.controller.resource;
 
 import htl.steyr.ereader.model.*;
 import htl.steyr.ereader.repository.CategoryRepository;
-import htl.steyr.ereader.repository.CustomerRepository;
 import htl.steyr.ereader.repository.ResourceRepository;
 import htl.steyr.ereader.repository.TypeRepository;
 import htl.steyr.ereader.util.FxUtilities;

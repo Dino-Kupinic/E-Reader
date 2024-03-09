@@ -46,4 +46,8 @@ public class Borrow {
   @NonNull
   private Resource resource;
 
+  @Override
+  public String toString() {
+    return getResource().getName() + ";" + getStartDate() + ";" + getEndDate();
+  }
 }

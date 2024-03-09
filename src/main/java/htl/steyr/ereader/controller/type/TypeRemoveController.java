@@ -1,6 +1,5 @@
 package htl.steyr.ereader.controller.type;
 
-import htl.steyr.ereader.model.Customer;
 import htl.steyr.ereader.model.PublisherInterface;
 import htl.steyr.ereader.model.SubscriberInterface;
 import htl.steyr.ereader.model.Type;
