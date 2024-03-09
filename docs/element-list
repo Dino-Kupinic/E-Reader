@@ -1,0 +1,10 @@
+htl.steyr.ereader
+htl.steyr.ereader.controller
+htl.steyr.ereader.controller.borrow
+htl.steyr.ereader.controller.category
+htl.steyr.ereader.controller.customer
+htl.steyr.ereader.controller.resource
+htl.steyr.ereader.controller.type
+htl.steyr.ereader.model
+htl.steyr.ereader.repository
+htl.steyr.ereader.util
