@@ -14,4 +14,6 @@ public interface PublisherInterface {
    * @param sub Subscriber
    */
   void addSubscriber(SubscriberInterface sub);
+
+  Object getData();
 }

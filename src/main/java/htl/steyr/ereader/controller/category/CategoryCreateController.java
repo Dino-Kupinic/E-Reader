@@ -1,6 +1,7 @@
 package htl.steyr.ereader.controller.category;
 
 import htl.steyr.ereader.model.Category;
+import htl.steyr.ereader.model.Customer;
 import htl.steyr.ereader.model.PublisherInterface;
 import htl.steyr.ereader.model.SubscriberInterface;
 import htl.steyr.ereader.repository.CategoryRepository;
@@ -38,6 +39,11 @@ public class CategoryCreateController implements Initializable, PublisherInterfa
   @Override
   public void addSubscriber(SubscriberInterface sub) {
     this.subscriber = sub;
+  }
+
+  @Override
+  public Object getData() {
+    return null;
   }
 
   @Override

@@ -51,6 +51,11 @@ public class CustomerEditController implements Initializable, PublisherInterface
     this.subscriber = sub;
   }
 
+  @Override
+  public Object getData() {
+    return null;
+  }
+
   public void customerListViewClicked(MouseEvent mouseEvent) {
     Customer c = editCustomerList.getSelectionModel().getSelectedItem();
     if (c != null) {

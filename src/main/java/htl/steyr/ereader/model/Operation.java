@@ -29,7 +29,11 @@ public enum Operation {
   // Type
   CREATE_TYPE("type/create.fxml"),
   EDIT_TYPE("type/edit.fxml"),
-  REMOVE_TYPE("type/remove.fxml");
+  REMOVE_TYPE("type/remove.fxml"),
+
+  // Borrow
+  CREATE_BORROW("borrow/create.fxml"),
+  RETURN_BORROW("borrow/return.fxml");
 
   /**
    * Filename of the FXML file.

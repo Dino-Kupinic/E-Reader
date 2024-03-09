@@ -1,5 +1,6 @@
 package htl.steyr.ereader.controller.type;
 
+import htl.steyr.ereader.model.Customer;
 import htl.steyr.ereader.model.PublisherInterface;
 import htl.steyr.ereader.model.SubscriberInterface;
 import htl.steyr.ereader.model.Type;
@@ -33,6 +34,11 @@ public class TypeRemoveController implements Initializable, PublisherInterface {
   @Override
   public void addSubscriber(SubscriberInterface sub) {
     this.subscriber = sub;
+  }
+
+  @Override
+  public Object getData() {
+    return null;
   }
 
   public void onDeleteClicked(ActionEvent actionEvent) {

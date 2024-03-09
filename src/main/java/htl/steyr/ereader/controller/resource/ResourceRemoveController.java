@@ -39,6 +39,11 @@ public class ResourceRemoveController implements Initializable, PublisherInterfa
     this.subscriber = sub;
   }
 
+  @Override
+  public Object getData() {
+    return null;
+  }
+
   public void onDeleteClicked(ActionEvent actionEvent) {
     Resource r = deleteResourceList.getSelectionModel().getSelectedItem();
     if (r != null) {

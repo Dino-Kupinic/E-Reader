@@ -1,6 +1,7 @@
 package htl.steyr.ereader.controller;
 
 import htl.steyr.ereader.JavaFxApplication;
+import htl.steyr.ereader.controller.borrow.BorrowCreateController;
 import htl.steyr.ereader.model.*;
 import htl.steyr.ereader.repository.BorrowRepository;
 import htl.steyr.ereader.repository.CustomerRepository;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 @Component
@@ -88,6 +90,26 @@ public class Controller implements Initializable {
     Scene scene = new Scene(root);
     Stage stage = new Stage();
     stage.setScene(scene);
+    stage.show();
+  }
+
+  public void createOperationWindow(Operation operation, SubscriberInterface sub, Consumer<Object> callback) throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource(operation.getFileName()));
+    loader.setControllerFactory(JavaFxApplication.getSpringContext()::getBean);
+    Parent root = loader.load();
+
+    PublisherInterface controller = loader.getController();
+    if (sub != null) {
+      controller.addSubscriber(sub);
+    }
+
+    Scene scene = new Scene(root);
+    Stage stage = new Stage();
+    stage.setScene(scene);
+    stage.setOnHidden(e -> {
+      Object data = controller.getData();
+      callback.accept(data);
+    });
     stage.show();
   }
 
@@ -171,11 +193,61 @@ public class Controller implements Initializable {
     }
   }
 
+  public void handleCreateResourceClicked(MouseEvent mouseEvent) throws IOException {
+    final int DOUBLE_CLICK = 2;
+    if (mouseEvent.getClickCount() == DOUBLE_CLICK) {
+      Resource resource = resourceTable.getSelectionModel().getSelectedItem();
+      if (resource == null)
+        return;
+      SubscriberInterface sub = () -> {
+        borrowTable.getItems().clear();
+        borrowTable.getItems().addAll(borrowRepository.findAll());
+        clearDetails();
+      };
+      createOperationWindow(Operation.CREATE_BORROW, sub, data -> {
+        if (data != null) {
+          LocalDate newBorrowStart = borrowCreateStart.getValue();
+          LocalDate newBorrowEnd = borrowCreateEnd.getValue();
+
+          // Check if the resource is already borrowed in the new borrow period
+          List<Borrow> borrows = borrowRepository.findByResource(resource);
+          for (Borrow borrow : borrows) {
+            LocalDate borrowStartDate = borrow.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate borrowEndDate = borrow.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if ((newBorrowStart.isAfter(borrowStartDate) && newBorrowStart.isBefore(borrowEndDate)) ||
+              (newBorrowEnd.isAfter(borrowStartDate) && newBorrowEnd.isBefore(borrowEndDate)) ||
+              (newBorrowStart.isBefore(borrowStartDate) && newBorrowEnd.isAfter(borrowEndDate))) {
+              FxUtilities.createErrorWindow("Resource is already borrowed in the selected period");
+              return;
+            }
+          }
+
+          Borrow b = new Borrow(
+            Date.from(newBorrowStart.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+            Date.from(newBorrowEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+            false,
+            (Customer) data,
+            resource
+          );
+          borrowRepository.save(b);
+          borrowTable.getItems().clear();
+          borrowTable.getItems().addAll(borrowRepository.findAll());
+        }
+      });
+    }
+  }
+
   public void borrowEditConfirmClicked(ActionEvent actionEvent) {
     Borrow b = borrowTable.getSelectionModel().getSelectedItem();
     if (b != null) {
       b.setCustomer(detailsCustomer.getValue());
       b.setResource(detailsResource.getValue());
+
+      if (detailsEnd.getValue().isBefore(detailsStart.getValue())) {
+        FxUtilities.createErrorWindow("End date must be after start date");
+        return;
+      }
+
       b.setStartDate(Date.from(detailsStart.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
       b.setEndDate(Date.from(detailsEnd.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
       borrowRepository.save(b);
@@ -217,6 +289,11 @@ public class Controller implements Initializable {
     LocalDate endDate = borrowCreateEnd.getValue();
 
     if (startDate == null || endDate == null) {
+      return;
+    }
+
+    if (endDate.isBefore(startDate)) {
+      FxUtilities.createErrorWindow("End date must be after start date");
       return;
     }
 
@@ -274,12 +351,12 @@ public class Controller implements Initializable {
     }
   }
 
-  public void handleCreateResourceClicked(MouseEvent mouseEvent) {
-    if (mouseEvent.getClickCount() == 2) {
-      Resource r = resourceTable.getSelectionModel().getSelectedItem();
-      if (r != null) {
-        detailsResource.setValue(r);
-      }
+  public void handleResourceChange(ActionEvent actionEvent) {
+    Resource r = detailsResource.getValue();
+    if (r != null) {
+      detailsResourceName.setText(r.getName());
+      detailsResourceCategory.setText(r.getCategory().getName());
+      detailsResourceType.setText(r.getType().getName());
     }
   }
 }

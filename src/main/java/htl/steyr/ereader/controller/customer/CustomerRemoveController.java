@@ -34,6 +34,11 @@ public class CustomerRemoveController implements Initializable, PublisherInterfa
     this.subscriber = sub;
   }
 
+  @Override
+  public Object getData() {
+    return null;
+  }
+
   public void onDeleteClicked(ActionEvent actionEvent) {
     Customer c = deleteCustomerList.getSelectionModel().getSelectedItem();
     if (c != null) {

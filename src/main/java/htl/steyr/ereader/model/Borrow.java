@@ -38,9 +38,12 @@ public class Borrow {
 
   @ManyToOne
   @JoinColumn(name = "customer_id")
+  @NonNull
   private Customer customer;
 
   @ManyToOne
   @JoinColumn(name = "resource_id")
+  @NonNull
   private Resource resource;
+
 }

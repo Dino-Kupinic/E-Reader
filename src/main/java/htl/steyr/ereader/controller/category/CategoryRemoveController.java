@@ -37,6 +37,11 @@ public class CategoryRemoveController implements Initializable, PublisherInterfa
     this.subscriber = sub;
   }
 
+  @Override
+  public Object getData() {
+    return null;
+  }
+
   public void onDeleteClicked(ActionEvent actionEvent) {
     Category c = deleteCategoryList.getSelectionModel().getSelectedItem();
     if (c != null) {

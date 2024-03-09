@@ -61,6 +61,11 @@ public class ResourceEditController implements Initializable, PublisherInterface
     this.subscriber = sub;
   }
 
+  @Override
+  public Object getData() {
+    return null;
+  }
+
   public void editResourceListClicked(MouseEvent mouseEvent) {
     Resource r = editResourceList.getSelectionModel().getSelectedItem();
 

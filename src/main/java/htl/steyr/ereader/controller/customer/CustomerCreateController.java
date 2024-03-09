@@ -31,6 +31,11 @@ public class CustomerCreateController implements Initializable, PublisherInterfa
     this.subscriber = sub;
   }
 
+  @Override
+  public Object getData() {
+    return null;
+  }
+
   public void saveClicked(ActionEvent actionEvent) {
     Customer customer = new Customer(
         firstNameInput.getText().trim(),

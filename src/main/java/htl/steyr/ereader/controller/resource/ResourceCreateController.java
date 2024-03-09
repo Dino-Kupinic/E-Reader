@@ -39,10 +39,21 @@ public class ResourceCreateController implements Initializable, PublisherInterfa
     this.subscriber = sub;
   }
 
+  @Override
+  public Object getData() {
+    return null;
+  }
+
   public void saveClicked(ActionEvent actionEvent) {
+    String dailyRateText = dailyRate.getText().trim();
+    if (!dailyRateText.matches("\\d+(\\.\\d+)?")) {
+      FxUtilities.createErrorWindow("Daily rate must be a number");
+      return;
+    }
+
     Resource resource = new Resource(
       nameInput.getText().trim(),
-      Double.parseDouble(dailyRate.getText().trim()),
+      Double.parseDouble(dailyRateText),
       categoryCombobox.getValue(),
       typeCombobox.getValue()
     );
