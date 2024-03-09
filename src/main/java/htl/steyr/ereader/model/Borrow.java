@@ -3,6 +3,7 @@ package htl.steyr.ereader.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -48,6 +49,7 @@ public class Borrow {
 
   @Override
   public String toString() {
-    return getResource().getName() + ";" + getStartDate() + ";" + getEndDate();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    return getResource().getName() + ";" + sdf.format(getStartDate()) + ";" + sdf.format(getEndDate());
   }
 }

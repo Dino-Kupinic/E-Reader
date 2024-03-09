@@ -70,7 +70,7 @@
     <DatePicker fx:id="borrowCreateEnd" layoutX="11.0" layoutY="72.0" onAction="#calculateAvailableDates" prefHeight="26.0" prefWidth="315.0" />
     <Label layoutX="11.0" layoutY="54.0" text="End" />
     <Label layoutX="11.0" layoutY="7.0" text="Start " />
-    <Label layoutX="11.0" layoutY="105.0" text="Available Resources" />
+    <Label layoutX="11.0" layoutY="105.0" prefHeight="17.0" prefWidth="205.0" text="Available Resources (double click)" />
     <TableView fx:id="resourceTable" layoutX="9.0" layoutY="129.0" onMouseClicked="#handleCreateResourceClicked" prefHeight="241.0" prefWidth="315.0" AnchorPane.bottomAnchor="11.0" AnchorPane.topAnchor="128.0">
       <columns>
         <TableColumn fx:id="resourceTableResource" maxWidth="1.7976931348623157E308" prefWidth="191.0" text="resource" />
@@ -115,7 +115,7 @@
   <AnchorPane layoutX="1049.0" layoutY="325.0" prefHeight="380.0" prefWidth="315.0" style="-fx-border-color: #d1d1d1;" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="325.0">
     <ListView fx:id="returnBorrowList" layoutX="6.0" layoutY="24.0" onMouseClicked="#handleReturnBorrowListClicked" prefHeight="138.0" prefWidth="302.0" AnchorPane.topAnchor="23.0" />
       <Label layoutX="6.0" layoutY="6.0" text="Customer" />
-      <Label layoutX="6.0" layoutY="163.0" text="Open Borrows" />
+      <Label layoutX="6.0" layoutY="163.0" prefHeight="17.0" prefWidth="268.0" text="Open Borrows (select multiple with shift)" />
       <ListView fx:id="returnBorrowOpenBorrows" layoutX="6.0" layoutY="180.0" onMouseClicked="#handleOpenBorrowsClicked" prefHeight="138.0" prefWidth="302.0" AnchorPane.bottomAnchor="66.0" AnchorPane.topAnchor="180.0" />
      <Button layoutX="190.0" layoutY="341.0" mnemonicParsing="false" onAction="#borrowReturnClicked" prefHeight="25.0" prefWidth="111.0" text="Return" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
       <Label layoutX="6.0" layoutY="321.0" prefHeight="17.0" prefWidth="76.0" text="Price" AnchorPane.bottomAnchor="42.0" />

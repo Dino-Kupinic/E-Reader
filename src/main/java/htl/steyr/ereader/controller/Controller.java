@@ -9,6 +9,7 @@ import htl.steyr.ereader.util.FxUtilities;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,7 +24,9 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,6 +66,7 @@ public class Controller implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
+    returnBorrowOpenBorrows.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     borrowTableId.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getId()));
     borrowTableResource.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getResource().getName()));
     borrowTableCustomer.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCustomer().toString()));
@@ -91,6 +95,7 @@ public class Controller implements Initializable {
     Scene scene = new Scene(root);
     Stage stage = new Stage();
     stage.setScene(scene);
+    stage.setResizable(false);
     stage.show();
   }
 
@@ -111,6 +116,7 @@ public class Controller implements Initializable {
       Object data = controller.getData();
       callback.accept(data);
     });
+    stage.setResizable(false);
     stage.show();
   }
 
@@ -210,7 +216,6 @@ public class Controller implements Initializable {
           LocalDate newBorrowStart = borrowCreateStart.getValue();
           LocalDate newBorrowEnd = borrowCreateEnd.getValue();
 
-          // Check if the resource is already borrowed in the new borrow period
           List<Borrow> borrows = borrowRepository.findByResource(resource);
           for (Borrow borrow : borrows) {
             LocalDate borrowStartDate = borrow.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -367,7 +372,26 @@ public class Controller implements Initializable {
   }
 
   public void handleOpenBorrowsClicked(MouseEvent mouseEvent) {
+    ObservableList<Borrow> selectedItems = returnBorrowOpenBorrows.getSelectionModel().getSelectedItems();
 
+    if (selectedItems.isEmpty()) {
+      return;
+    }
+
+    if (selectedItems.size() >= 5) {
+
+    }
+    int sum = 0;
+    for (Borrow b : selectedItems) {
+      LocalDateTime startDateTime = LocalDateTime.ofInstant(b.getStartDate().toInstant(), ZoneId.systemDefault());
+      long daysBetween = ChronoUnit.DAYS.between(startDateTime, LocalDateTime.now());
+      if (daysBetween == 0) {
+        sum += b.getResource().getDailyRate();
+        continue;
+      }
+      sum += (int) (daysBetween * b.getResource().getDailyRate());
+    }
+    priceLabel.setText(sum + "€");
   }
 
   public void handleReturnBorrowListClicked(MouseEvent mouseEvent) {
