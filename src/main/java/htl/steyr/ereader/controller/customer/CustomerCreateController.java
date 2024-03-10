@@ -37,9 +37,10 @@ public class CustomerCreateController implements Initializable, PublisherInterfa
   }
 
   public void saveClicked(ActionEvent actionEvent) {
+    if (CustomerEditController.checkNames(firstNameInput, lastNameInput, customerRepository)) return;
     Customer customer = new Customer(
-        firstNameInput.getText().trim(),
-        lastNameInput.getText().trim()
+      firstNameInput.getText().trim(),
+      lastNameInput.getText().trim()
     );
     this.customerRepository.save(customer);
     this.subscriber.triggerAction();

@@ -29,12 +29,42 @@ public class CustomerEditController implements Initializable, PublisherInterface
   public void saveClicked(ActionEvent actionEvent) {
     Customer c = editCustomerList.getSelectionModel().getSelectedItem();
     if (c != null) {
+      if (c.getFirstName().equals(firstNameInput.getText().trim()) && c.getLastName().equals(lastNameInput.getText().trim())) {
+        customerRepository.save(c);
+        subscriber.triggerAction();
+        FxUtilities.closeWindow(actionEvent);
+        return;
+      }
+
+      if (checkNames(firstNameInput, lastNameInput, customerRepository)) return;
+
       c.setFirstName(firstNameInput.getText());
       c.setLastName(lastNameInput.getText());
       customerRepository.save(c);
       subscriber.triggerAction();
       FxUtilities.closeWindow(actionEvent);
     }
+  }
+
+  static boolean checkNames(TextField firstNameInput, TextField lastNameInput, CustomerRepository customerRepository) {
+    if (firstNameInput.getText().trim().isEmpty() || lastNameInput.getText().trim().isEmpty()) {
+      FxUtilities.createErrorWindow("First and last name cannot be empty");
+      return true;
+    }
+
+    if (firstNameInput.getText().trim().matches(".*\\d.*") || lastNameInput.getText().trim().matches(".*\\d.*")) {
+      FxUtilities.createErrorWindow("First and last name cannot contain numbers");
+      return true;
+    }
+
+    if (customerRepository.findByFirstNameAndLastName(
+      firstNameInput.getText().trim(),
+      lastNameInput.getText().trim()
+    ) != null) {
+      FxUtilities.createErrorWindow("Customer with this name already exists");
+      return true;
+    }
+    return false;
   }
 
   public void cancelClicked(ActionEvent actionEvent) {
