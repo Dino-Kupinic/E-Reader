@@ -33,16 +33,42 @@ public class ResourceEditController implements Initializable, PublisherInterface
 
   public void saveClicked(ActionEvent actionEvent) {
     Resource r = editResourceList.getSelectionModel().getSelectedItem();
-
-    if (r != null) {
-      r.setName(nameInput.getText());
-      r.setDailyRate(Double.parseDouble(dailyRateInput.getText()));
-      r.setCategory(categoryComboBox.getSelectionModel().getSelectedItem());
-      r.setType(typeComboBox.getSelectionModel().getSelectedItem());
-
-      resourceRepository.save(r);
-      subscriber.triggerAction();
+    if (r == null) {
+      return;
     }
+
+    if (
+      nameInput.getText().trim().isEmpty() ||
+        dailyRateInput.getText().trim().isEmpty() ||
+        categoryComboBox.getSelectionModel().isEmpty() ||
+        typeComboBox.getSelectionModel().isEmpty()
+    ) {
+      FxUtilities.createErrorWindow("All fields must be filled");
+      return;
+    }
+
+    if (!dailyRateInput.getText().trim().matches("\\d+(\\.\\d+)?")) {
+      FxUtilities.createErrorWindow("Daily rate must be a number");
+      return;
+    }
+
+    if (resourceRepository.findByNameAndCategoryAndTypeAndDailyRate(
+      nameInput.getText().trim(),
+      categoryComboBox.getSelectionModel().getSelectedItem(),
+      typeComboBox.getSelectionModel().getSelectedItem(),
+      Double.parseDouble(dailyRateInput.getText().trim())
+    ) != null) {
+      FxUtilities.createErrorWindow("Resource with this name, category, type and daily rate already exists");
+      return;
+    }
+
+    r.setName(nameInput.getText());
+    r.setDailyRate(Double.parseDouble(dailyRateInput.getText()));
+    r.setCategory(categoryComboBox.getSelectionModel().getSelectedItem());
+    r.setType(typeComboBox.getSelectionModel().getSelectedItem());
+
+    resourceRepository.save(r);
+    subscriber.triggerAction();
     FxUtilities.closeWindow(actionEvent);
   }
 
