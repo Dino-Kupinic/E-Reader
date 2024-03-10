@@ -52,8 +52,9 @@ public class CustomerEditController implements Initializable, PublisherInterface
       return true;
     }
 
-    if (firstNameInput.getText().trim().matches(".*\\d.*") || lastNameInput.getText().trim().matches(".*\\d.*")) {
-      FxUtilities.createErrorWindow("First and last name cannot contain numbers");
+    // name cannot contain characters other than letters
+    if (!firstNameInput.getText().trim().matches("[a-zA-Z]+") || !lastNameInput.getText().trim().matches("[a-zA-Z]+")) {
+      FxUtilities.createErrorWindow("First and last name can only contain letters");
       return true;
     }
 
