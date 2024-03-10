@@ -23,6 +23,10 @@ public class CategoryCreateController implements Initializable, PublisherInterfa
   private final CategoryRepository categoryRepository;
 
   public void saveClicked(ActionEvent actionEvent) {
+    if (categoryRepository.findByName(nameInput.getText().trim()) != null) {
+      FxUtilities.createErrorWindow("Category with this name already exists");
+      return;
+    }
     Category category = new Category(
       nameInput.getText().trim()
     );

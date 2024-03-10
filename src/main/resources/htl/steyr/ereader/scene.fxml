@@ -71,7 +71,7 @@
     <Label layoutX="11.0" layoutY="54.0" text="End" />
     <Label layoutX="11.0" layoutY="7.0" text="Start " />
     <Label layoutX="11.0" layoutY="105.0" prefHeight="17.0" prefWidth="205.0" text="Available Resources (double click)" />
-    <TableView fx:id="resourceTable" layoutX="9.0" layoutY="129.0" onMouseClicked="#handleCreateResourceClicked" prefHeight="241.0" prefWidth="315.0" AnchorPane.bottomAnchor="11.0" AnchorPane.topAnchor="128.0">
+    <TableView fx:id="resourceTable" layoutX="9.0" layoutY="129.0" onMouseClicked="#handleCreateBorrowClicked" prefHeight="241.0" prefWidth="315.0" AnchorPane.bottomAnchor="11.0" AnchorPane.topAnchor="128.0">
       <columns>
         <TableColumn fx:id="resourceTableResource" maxWidth="1.7976931348623157E308" prefWidth="191.0" text="resource" />
         <TableColumn fx:id="resourceTableCategory" maxWidth="1.7976931348623157E308" prefWidth="179.0" text="category" />
@@ -122,6 +122,11 @@
       <Label fx:id="priceLabel" layoutX="6.0" layoutY="337.0" prefHeight="32.0" prefWidth="173.0" text="0.00€" AnchorPane.bottomAnchor="11.0">
          <font>
             <Font name="System Bold" size="19.0" />
+         </font>
+      </Label>
+      <Label fx:id="discountLabel" layoutX="69.0" layoutY="344.0" prefHeight="17.0" prefWidth="48.0" text="-10%" textFill="#d01313" visible="false">
+         <font>
+            <Font name="System Bold" size="12.0" />
          </font>
       </Label>
   </AnchorPane>

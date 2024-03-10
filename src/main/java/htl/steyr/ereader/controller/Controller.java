@@ -27,10 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Consumer;
 
 @RequiredArgsConstructor
@@ -59,6 +56,7 @@ public class Controller implements Initializable {
   public ListView<Customer> returnBorrowList;
   public ListView<Borrow> returnBorrowOpenBorrows;
   public Label priceLabel;
+  public Label discountLabel;
 
   private final BorrowRepository borrowRepository;
   private final CustomerRepository customerRepository;
@@ -200,47 +198,57 @@ public class Controller implements Initializable {
     }
   }
 
-  public void handleCreateResourceClicked(MouseEvent mouseEvent) throws IOException {
+  public void handleCreateBorrowClicked(MouseEvent mouseEvent) throws IOException {
     final int DOUBLE_CLICK = 2;
-    if (mouseEvent.getClickCount() == DOUBLE_CLICK) {
-      Resource resource = resourceTable.getSelectionModel().getSelectedItem();
-      if (resource == null)
-        return;
-      SubscriberInterface sub = () -> {
+    if (mouseEvent.getClickCount() != DOUBLE_CLICK) {
+      return;
+    }
+
+    Resource resource = resourceTable.getSelectionModel().getSelectedItem();
+    if (resource == null)
+      return;
+
+    SubscriberInterface sub = () -> {
+      borrowTable.getItems().clear();
+      borrowTable.getItems().addAll(borrowRepository.findAll());
+      clearDetails();
+    };
+
+    createOperationWindow(Operation.CREATE_BORROW, sub, data -> {
+      if (data != null) {
+        LocalDate newBorrowStart = borrowCreateStart.getValue();
+        LocalDate newBorrowEnd = borrowCreateEnd.getValue();
+
+        List<Borrow> borrows = borrowRepository.findByResource(resource);
+        for (Borrow borrow : borrows) {
+          LocalDate borrowStartDate = borrow.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+          LocalDate borrowEndDate = borrow.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+          if ((newBorrowStart.isAfter(borrowStartDate) && newBorrowStart.isBefore(borrowEndDate)) ||
+            (newBorrowEnd.isAfter(borrowStartDate) && newBorrowEnd.isBefore(borrowEndDate)) ||
+            (newBorrowStart.isBefore(borrowStartDate) && newBorrowEnd.isAfter(borrowEndDate))) {
+            FxUtilities.createErrorWindow("Resource is already borrowed in the selected period");
+            return;
+          }
+        }
+
+        Borrow b = new Borrow(
+          Date.from(newBorrowStart.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+          Date.from(newBorrowEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+          false,
+          (Customer) data,
+          resource
+        );
+        borrowRepository.save(b);
         borrowTable.getItems().clear();
         borrowTable.getItems().addAll(borrowRepository.findAll());
-        clearDetails();
-      };
-      createOperationWindow(Operation.CREATE_BORROW, sub, data -> {
-        if (data != null) {
-          LocalDate newBorrowStart = borrowCreateStart.getValue();
-          LocalDate newBorrowEnd = borrowCreateEnd.getValue();
 
-          List<Borrow> borrows = borrowRepository.findByResource(resource);
-          for (Borrow borrow : borrows) {
-            LocalDate borrowStartDate = borrow.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate borrowEndDate = borrow.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            if ((newBorrowStart.isAfter(borrowStartDate) && newBorrowStart.isBefore(borrowEndDate)) ||
-              (newBorrowEnd.isAfter(borrowStartDate) && newBorrowEnd.isBefore(borrowEndDate)) ||
-              (newBorrowStart.isBefore(borrowStartDate) && newBorrowEnd.isAfter(borrowEndDate))) {
-              FxUtilities.createErrorWindow("Resource is already borrowed in the selected period");
-              return;
-            }
-          }
-
-          Borrow b = new Borrow(
-            Date.from(newBorrowStart.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-            Date.from(newBorrowEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-            false,
-            (Customer) data,
-            resource
-          );
-          borrowRepository.save(b);
-          borrowTable.getItems().clear();
-          borrowTable.getItems().addAll(borrowRepository.findAll());
-        }
-      });
-    }
+        resourceTable.getItems().clear();
+        borrowCreateStart.setValue(null);
+        borrowCreateEnd.setValue(null);
+        returnBorrowList.getItems().clear();
+        returnBorrowList.getItems().addAll(customerRepository.findAll());
+      }
+    });
   }
 
   public void borrowEditConfirmClicked(ActionEvent actionEvent) {
@@ -289,10 +297,14 @@ public class Controller implements Initializable {
   }
 
   public void borrowReturnClicked(ActionEvent actionEvent) {
-    Customer c = returnBorrowList.getSelectionModel().getSelectedItem();
-    if (c != null) {
-
+    ObservableList<Borrow> selectedItems = returnBorrowOpenBorrows.getSelectionModel().getSelectedItems();
+    for (Borrow b : selectedItems) {
+      b.setIsReturned(true);
+      borrowRepository.save(b);
     }
+    returnBorrowOpenBorrows.getItems().clear();
+    borrowTable.getItems().clear();
+    borrowTable.getItems().addAll(borrowRepository.findAll());
   }
 
   public void calculateAvailableDates(ActionEvent actionEvent) {
@@ -378,20 +390,53 @@ public class Controller implements Initializable {
       return;
     }
 
+    double discountedRate = 0;
     if (selectedItems.size() >= 5) {
+      Set<LocalDate> uniqueDates = new HashSet<>();
 
+      for (Borrow b : selectedItems) {
+        LocalDate startDate = b.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate endDate = b.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        while (!startDate.isAfter(endDate)) {
+          uniqueDates.add(startDate);
+          startDate = startDate.plusDays(1);
+        }
+      }
+
+      double totalDailyRate = 0;
+      for (LocalDate date : uniqueDates) {
+        for (Borrow b : selectedItems) {
+          LocalDate borrowStartDate = b.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+          LocalDate borrowEndDate = b.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+          if (!date.isBefore(borrowStartDate) && !date.isAfter(borrowEndDate)) {
+            totalDailyRate += b.getResource().getDailyRate();
+          }
+        }
+      }
+
+      discountedRate = 0.9 * totalDailyRate;
     }
-    int sum = 0;
+
+    double sum = 0;
     for (Borrow b : selectedItems) {
       LocalDateTime startDateTime = LocalDateTime.ofInstant(b.getStartDate().toInstant(), ZoneId.systemDefault());
+      if (startDateTime.isAfter(LocalDateTime.now())) {
+        continue;
+      }
       long daysBetween = ChronoUnit.DAYS.between(startDateTime, LocalDateTime.now());
       if (daysBetween == 0) {
         sum += b.getResource().getDailyRate();
         continue;
       }
-      sum += (int) (daysBetween * b.getResource().getDailyRate());
+      sum += daysBetween * b.getResource().getDailyRate();
+      if (discountedRate != 0) {
+        sum -= discountedRate;
+        discountLabel.setVisible(true);
+      }
     }
-    priceLabel.setText(sum + "€");
+    priceLabel.setText(Math.abs(sum) + "€");
   }
 
   public void handleReturnBorrowListClicked(MouseEvent mouseEvent) {
@@ -400,5 +445,7 @@ public class Controller implements Initializable {
       returnBorrowOpenBorrows.getItems().clear();
       returnBorrowOpenBorrows.getItems().addAll(borrowRepository.findByCustomerAndIsReturned(c, false));
     }
+    priceLabel.setText("0.00€");
+    discountLabel.setVisible(false);
   }
 }

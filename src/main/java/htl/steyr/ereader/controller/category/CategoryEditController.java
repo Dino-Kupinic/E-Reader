@@ -28,7 +28,25 @@ public class CategoryEditController implements Initializable, PublisherInterface
   public void saveClicked(ActionEvent actionEvent) {
     Category c = editCategoryList.getSelectionModel().getSelectedItem();
     if (c != null) {
-      c.setName(nameInput.getText());
+      if (c.getName().equals(nameInput.getText().trim())) {
+        categoryRepository.save(c);
+        subscriber.triggerAction();
+        FxUtilities.closeWindow(actionEvent);
+        return;
+      }
+
+      c.setName(nameInput.getText().trim());
+      if (c.getName().isEmpty()) {
+        FxUtilities.createErrorWindow("Category name cannot be empty");
+        return;
+      }
+
+
+      if (categoryRepository.findByName(c.getName()) != null) {
+        FxUtilities.createErrorWindow("Category with this name already exists");
+        return;
+      }
+
       categoryRepository.save(c);
       subscriber.triggerAction();
       FxUtilities.closeWindow(actionEvent);
