@@ -57,10 +57,18 @@ public class Controller implements Initializable {
   public ListView<Borrow> returnBorrowOpenBorrows;
   public Label priceLabel;
   public Label discountLabel;
+  public ComboBox<Category> categoryFilter;
+  public ComboBox<Type> typeFilter;
+  public TextField titleFilter;
 
   private final BorrowRepository borrowRepository;
   private final CustomerRepository customerRepository;
   private final ResourceRepository resourceRepository;
+  private final SubscriberInterface sub = () -> {
+    borrowTable.getItems().clear();
+    borrowTable.getItems().addAll(borrowRepository.findAll());
+    clearDetails();
+  };
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -120,11 +128,6 @@ public class Controller implements Initializable {
 
   public void manageCustomers(ActionEvent actionEvent) throws IOException {
     String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
-    SubscriberInterface sub = () -> {
-      borrowTable.getItems().clear();
-      borrowTable.getItems().addAll(borrowRepository.findAll());
-      clearDetails();
-    };
     switch (menuItemText) {
       case "CREATE":
         createOperationWindow(Operation.CREATE_CUSTOMER, sub);
@@ -140,11 +143,6 @@ public class Controller implements Initializable {
 
   public void manageResources(ActionEvent actionEvent) throws IOException {
     String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
-    SubscriberInterface sub = () -> {
-      borrowTable.getItems().clear();
-      borrowTable.getItems().addAll(borrowRepository.findAll());
-      clearDetails();
-    };
     switch (menuItemText) {
       case "CREATE":
         createOperationWindow(Operation.CREATE_RESOURCE, sub);
@@ -160,11 +158,6 @@ public class Controller implements Initializable {
 
   public void manageCategories(ActionEvent actionEvent) throws IOException {
     String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
-    SubscriberInterface sub = () -> {
-      borrowTable.getItems().clear();
-      borrowTable.getItems().addAll(borrowRepository.findAll());
-      clearDetails();
-    };
     switch (menuItemText) {
       case "CREATE":
         createOperationWindow(Operation.CREATE_CATEGORY, sub);
@@ -180,11 +173,6 @@ public class Controller implements Initializable {
 
   public void manageTypes(ActionEvent actionEvent) throws IOException {
     String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
-    SubscriberInterface sub = () -> {
-      borrowTable.getItems().clear();
-      borrowTable.getItems().addAll(borrowRepository.findAll());
-      clearDetails();
-    };
     switch (menuItemText) {
       case "CREATE":
         createOperationWindow(Operation.CREATE_TYPE, sub);
@@ -207,12 +195,6 @@ public class Controller implements Initializable {
     Resource resource = resourceTable.getSelectionModel().getSelectedItem();
     if (resource == null)
       return;
-
-    SubscriberInterface sub = () -> {
-      borrowTable.getItems().clear();
-      borrowTable.getItems().addAll(borrowRepository.findAll());
-      clearDetails();
-    };
 
     createOperationWindow(Operation.CREATE_BORROW, sub, data -> {
       if (data != null) {
@@ -330,9 +312,11 @@ public class Controller implements Initializable {
       for (Borrow borrow : borrows) {
         LocalDate borrowStartDate = borrow.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate borrowEndDate = borrow.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        if ((startDate.isAfter(borrowStartDate) && startDate.isBefore(borrowEndDate)) ||
-          (endDate.isAfter(borrowStartDate) && endDate.isBefore(borrowEndDate)) ||
-          (startDate.isBefore(borrowStartDate) && endDate.isAfter(borrowEndDate))) {
+        if ((startDate.isEqual(borrowStartDate) || startDate.isAfter(borrowStartDate)) && startDate.isBefore(borrowEndDate)) {
+          isAvailable = false;
+          break;
+        }
+        if (endDate.isAfter(borrowStartDate) && (endDate.isBefore(borrowEndDate) || endDate.isEqual(borrowEndDate))) {
           isAvailable = false;
           break;
         }
@@ -447,5 +431,8 @@ public class Controller implements Initializable {
     }
     priceLabel.setText("0.00€");
     discountLabel.setVisible(false);
+  }
+
+  public void applyFilters(ActionEvent actionEvent) {
   }
 }
