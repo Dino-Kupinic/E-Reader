@@ -18,7 +18,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.net.URL;
@@ -65,6 +64,8 @@ public class Controller implements Initializable {
   private final ResourceRepository resourceRepository;
   private final CategoryRepository categoryRepository;
   private final TypeRepository typeRepository;
+
+  private List<Resource> availableResources = new ArrayList<>();
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -170,6 +171,8 @@ public class Controller implements Initializable {
     SubscriberInterface sub = () -> {
       borrowTable.getItems().clear();
       borrowTable.getItems().addAll(borrowRepository.findAll());
+      categoryFilter.getItems().clear();
+      categoryFilter.getItems().addAll(categoryRepository.findAll());
       clearDetails();
     };
     switch (menuItemText) {
@@ -190,6 +193,8 @@ public class Controller implements Initializable {
     SubscriberInterface sub = () -> {
       borrowTable.getItems().clear();
       borrowTable.getItems().addAll(borrowRepository.findAll());
+      typeFilter.getItems().clear();
+      typeFilter.getItems().addAll(typeRepository.findAll());
       clearDetails();
     };
     switch (menuItemText) {
@@ -315,6 +320,8 @@ public class Controller implements Initializable {
   }
 
   public void calculateAvailableDates(ActionEvent actionEvent) {
+    availableResources = new ArrayList<>();
+    resourceTable.getItems().clear();
     LocalDate startDate = borrowCreateStart.getValue();
     LocalDate endDate = borrowCreateEnd.getValue();
 
@@ -327,7 +334,6 @@ public class Controller implements Initializable {
       return;
     }
 
-    List<Resource> availableResources = new ArrayList<>();
     List<Resource> allResources = resourceRepository.findAll();
 
     for (Resource resource : allResources) {
@@ -468,13 +474,12 @@ public class Controller implements Initializable {
     }
 
     List<Resource> filteredResources = new ArrayList<>();
-    List<Resource> allResources = resourceRepository.findAll();
 
-    for (Resource resource : allResources) {
-      if (category != null && !resource.getCategory().equals(category)) {
+    for (Resource resource : availableResources) {
+      if (category != null && !resource.getCategory().getName().equals(category.getName())) {
         continue;
       }
-      if (type != null && !resource.getType().equals(type)) {
+      if (type != null && !resource.getType().getName().equals(type.getName())) {
         continue;
       }
       if (!title.isEmpty() && !resource.getName().toLowerCase().contains(title.toLowerCase())) {
@@ -484,5 +489,14 @@ public class Controller implements Initializable {
     }
     resourceTable.getItems().clear();
     resourceTable.getItems().addAll(filteredResources);
+  }
+
+  public void onResetCreateBorrowClicked(ActionEvent actionEvent) {
+    borrowCreateStart.setValue(null);
+    borrowCreateEnd.setValue(null);
+    categoryFilter.valueProperty().setValue(null);
+    typeFilter.valueProperty().setValue(null);
+    titleFilter.clear();
+    resourceTable.getItems().clear();
   }
 }
