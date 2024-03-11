@@ -2,9 +2,7 @@ package htl.steyr.ereader.controller;
 
 import htl.steyr.ereader.JavaFxApplication;
 import htl.steyr.ereader.model.*;
-import htl.steyr.ereader.repository.BorrowRepository;
-import htl.steyr.ereader.repository.CustomerRepository;
-import htl.steyr.ereader.repository.ResourceRepository;
+import htl.steyr.ereader.repository.*;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -20,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.net.URL;
@@ -64,11 +63,8 @@ public class Controller implements Initializable {
   private final BorrowRepository borrowRepository;
   private final CustomerRepository customerRepository;
   private final ResourceRepository resourceRepository;
-  private final SubscriberInterface sub = () -> {
-    borrowTable.getItems().clear();
-    borrowTable.getItems().addAll(borrowRepository.findAll());
-    clearDetails();
-  };
+  private final CategoryRepository categoryRepository;
+  private final TypeRepository typeRepository;
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -83,6 +79,9 @@ public class Controller implements Initializable {
     resourceTableResource.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
     resourceTableCategory.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getCategory()));
     resourceTableType.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getType()));
+
+    categoryFilter.getItems().addAll(categoryRepository.findAll());
+    typeFilter.getItems().addAll(typeRepository.findAll());
 
     borrowTable.getItems().addAll(borrowRepository.findAll());
     returnBorrowList.getItems().addAll(customerRepository.findAll());
@@ -128,6 +127,11 @@ public class Controller implements Initializable {
 
   public void manageCustomers(ActionEvent actionEvent) throws IOException {
     String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
+    SubscriberInterface sub = () -> {
+      borrowTable.getItems().clear();
+      borrowTable.getItems().addAll(borrowRepository.findAll());
+      clearDetails();
+    };
     switch (menuItemText) {
       case "CREATE":
         createOperationWindow(Operation.CREATE_CUSTOMER, sub);
@@ -143,6 +147,11 @@ public class Controller implements Initializable {
 
   public void manageResources(ActionEvent actionEvent) throws IOException {
     String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
+    SubscriberInterface sub = () -> {
+      borrowTable.getItems().clear();
+      borrowTable.getItems().addAll(borrowRepository.findAll());
+      clearDetails();
+    };
     switch (menuItemText) {
       case "CREATE":
         createOperationWindow(Operation.CREATE_RESOURCE, sub);
@@ -158,6 +167,11 @@ public class Controller implements Initializable {
 
   public void manageCategories(ActionEvent actionEvent) throws IOException {
     String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
+    SubscriberInterface sub = () -> {
+      borrowTable.getItems().clear();
+      borrowTable.getItems().addAll(borrowRepository.findAll());
+      clearDetails();
+    };
     switch (menuItemText) {
       case "CREATE":
         createOperationWindow(Operation.CREATE_CATEGORY, sub);
@@ -173,6 +187,11 @@ public class Controller implements Initializable {
 
   public void manageTypes(ActionEvent actionEvent) throws IOException {
     String menuItemText = FxUtilities.getMenuItemText(actionEvent, true);
+    SubscriberInterface sub = () -> {
+      borrowTable.getItems().clear();
+      borrowTable.getItems().addAll(borrowRepository.findAll());
+      clearDetails();
+    };
     switch (menuItemText) {
       case "CREATE":
         createOperationWindow(Operation.CREATE_TYPE, sub);
@@ -195,6 +214,12 @@ public class Controller implements Initializable {
     Resource resource = resourceTable.getSelectionModel().getSelectedItem();
     if (resource == null)
       return;
+
+    SubscriberInterface sub = () -> {
+      borrowTable.getItems().clear();
+      borrowTable.getItems().addAll(borrowRepository.findAll());
+      clearDetails();
+    };
 
     createOperationWindow(Operation.CREATE_BORROW, sub, data -> {
       if (data != null) {
@@ -434,5 +459,30 @@ public class Controller implements Initializable {
   }
 
   public void applyFilters(ActionEvent actionEvent) {
+    Category category = categoryFilter.getValue();
+    Type type = typeFilter.getValue();
+    String title = titleFilter.getText();
+
+    if (category == null && type == null && title.isEmpty()) {
+      return;
+    }
+
+    List<Resource> filteredResources = new ArrayList<>();
+    List<Resource> allResources = resourceRepository.findAll();
+
+    for (Resource resource : allResources) {
+      if (category != null && !resource.getCategory().equals(category)) {
+        continue;
+      }
+      if (type != null && !resource.getType().equals(type)) {
+        continue;
+      }
+      if (!title.isEmpty() && !resource.getName().toLowerCase().contains(title.toLowerCase())) {
+        continue;
+      }
+      filteredResources.add(resource);
+    }
+    resourceTable.getItems().clear();
+    resourceTable.getItems().addAll(filteredResources);
   }
 }
