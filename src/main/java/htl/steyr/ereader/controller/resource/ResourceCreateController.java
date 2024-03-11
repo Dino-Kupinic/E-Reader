@@ -56,9 +56,20 @@ public class ResourceCreateController implements Initializable, PublisherInterfa
       return;
     }
 
+    if (
+      nameInput.getText().trim().isEmpty() ||
+      dailyRateText.isEmpty() ||
+      categoryCombobox.getSelectionModel().isEmpty() ||
+      typeCombobox.getSelectionModel().isEmpty()
+    ) {
+      FxUtilities.createErrorWindow("All fields must be filled");
+      return;
+    }
+
     Resource resource = new Resource(
       nameInput.getText().trim(),
       Double.parseDouble(dailyRateText),
+      false,
       categoryCombobox.getValue(),
       typeCombobox.getValue()
     );

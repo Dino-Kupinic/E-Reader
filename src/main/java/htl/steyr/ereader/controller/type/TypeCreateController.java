@@ -25,6 +25,10 @@ public class TypeCreateController implements Initializable, PublisherInterface {
   private final TypeRepository typeRepository;
 
   public void saveClicked(ActionEvent actionEvent) {
+    if (nameInput.getText().trim().isEmpty()) {
+      FxUtilities.createErrorWindow("Type name cannot be empty");
+      return;
+    }
     Type type = new Type(
       nameInput.getText().trim()
     );

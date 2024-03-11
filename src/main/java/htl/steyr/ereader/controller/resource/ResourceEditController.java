@@ -45,9 +45,7 @@ public class ResourceEditController implements Initializable, PublisherInterface
 
     if (
       nameInput.getText().trim().isEmpty() ||
-        dailyRateInput.getText().trim().isEmpty() ||
-        categoryComboBox.getSelectionModel().isEmpty() ||
-        typeComboBox.getSelectionModel().isEmpty()
+      dailyRateInput.getText().trim().isEmpty()
     ) {
       FxUtilities.createErrorWindow("All fields must be filled");
       return;
@@ -84,7 +82,7 @@ public class ResourceEditController implements Initializable, PublisherInterface
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    editResourceList.getItems().addAll(resourceRepository.findAll());
+    editResourceList.getItems().addAll(resourceRepository.findAllByIsDeletedFalse());
   }
 
   @Override

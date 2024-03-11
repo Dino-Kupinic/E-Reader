@@ -88,6 +88,8 @@ public class Controller implements Initializable {
   private TextField titleFilter;
   @FXML
   private Label priceForDaysLabel;
+  @FXML
+  private DatePicker actualReturnDate;
 
   private final BorrowRepository borrowRepository;
   private final CustomerRepository customerRepository;
@@ -110,6 +112,8 @@ public class Controller implements Initializable {
     resourceTableResource.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
     resourceTableCategory.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getCategory()));
     resourceTableType.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getType()));
+
+    actualReturnDate.setValue(LocalDate.now());
 
     categoryFilter.getItems().addAll(categoryRepository.findAll());
     typeFilter.getItems().addAll(typeRepository.findAll());
@@ -347,6 +351,9 @@ public class Controller implements Initializable {
     returnBorrowOpenBorrows.getItems().clear();
     borrowTable.getItems().clear();
     borrowTable.getItems().addAll(borrowRepository.findAll());
+    actualReturnDate.setValue(LocalDate.now());
+    priceForDaysLabel.setText("Price");
+    priceLabel.setText("0.00€");
   }
 
   public void calculateAvailableDates(ActionEvent actionEvent) {
@@ -364,7 +371,7 @@ public class Controller implements Initializable {
       return;
     }
 
-    List<Resource> allResources = resourceRepository.findAll();
+    List<Resource> allResources = resourceRepository.findAllByIsDeletedFalse();
 
     for (Resource resource : allResources) {
       boolean isAvailable = true;
@@ -395,7 +402,7 @@ public class Controller implements Initializable {
     Borrow b = borrowTable.getSelectionModel().getSelectedItem();
     if (b != null) {
       detailsCustomer.getItems().addAll(customerRepository.findAll());
-      detailsResource.getItems().addAll(resourceRepository.findAll());
+      detailsResource.getItems().addAll(resourceRepository.findAllByIsDeletedFalse());
       detailsCustomer.getSelectionModel().select(b.getCustomer());
       detailsResource.getSelectionModel().select(b.getResource());
 
@@ -428,7 +435,7 @@ public class Controller implements Initializable {
     }
   }
 
-  public void handleOpenBorrowsClicked(MouseEvent mouseEvent) {
+  public void handleOpenBorrowsClicked() {
     ObservableList<Borrow> selectedItems = returnBorrowOpenBorrows.getSelectionModel().getSelectedItems();
 
     if (selectedItems.isEmpty()) {
@@ -441,7 +448,11 @@ public class Controller implements Initializable {
 
       for (Borrow b : selectedItems) {
         LocalDate startDate = b.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate endDate = b.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate endDate;
+        endDate = b.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (actualReturnDate.getValue() != null) {
+          endDate = actualReturnDate.getValue();
+        }
 
         while (!startDate.isAfter(endDate)) {
           uniqueDates.add(startDate);
@@ -467,10 +478,15 @@ public class Controller implements Initializable {
     double sum = 0;
     for (Borrow b : selectedItems) {
       LocalDateTime startDateTime = LocalDateTime.ofInstant(b.getStartDate().toInstant(), ZoneId.systemDefault());
-      if (startDateTime.isAfter(LocalDateTime.now())) {
+      LocalDateTime endTime;
+      endTime = LocalDateTime.now();
+      if (actualReturnDate.getValue() != null) {
+        endTime = actualReturnDate.getValue().atStartOfDay();
+      }
+      if (startDateTime.isAfter(endTime)) {
         continue;
       }
-      long daysBetween = ChronoUnit.DAYS.between(startDateTime, LocalDateTime.now());
+      long daysBetween = ChronoUnit.DAYS.between(startDateTime, endTime);
       if (daysBetween == 0) {
         sum += b.getResource().getDailyRate();
         continue;
@@ -530,5 +546,14 @@ public class Controller implements Initializable {
     typeFilter.valueProperty().setValue(null);
     titleFilter.clear();
     resourceTable.getItems().clear();
+  }
+
+  public void handleActualReturnDate(ActionEvent actionEvent) {
+    if (actualReturnDate.getValue().isBefore(LocalDate.now())) {
+      FxUtilities.createErrorWindow("Actual return date must be today or in the future");
+      return;
+    }
+
+    handleOpenBorrowsClicked();
   }
 }

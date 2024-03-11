@@ -31,7 +31,11 @@ public class Resource {
   @NonNull
   private Double dailyRate;
 
-  @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Column(name = "is_deleted", nullable = false)
+  @NonNull
+  private Boolean isDeleted;
+
+  @OneToMany(mappedBy = "resource")
   private List<Borrow> borrowList;
 
   @ManyToOne

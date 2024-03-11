@@ -30,12 +30,31 @@ public class TypeEditController implements Initializable, PublisherInterface {
 
   public void saveClicked(ActionEvent actionEvent) {
     Type c = editTypeList.getSelectionModel().getSelectedItem();
-    if (c != null) {
-      c.setName(nameInput.getText());
+    if (c == null) {
+      return;
+    }
+
+    if (c.getName().equals(nameInput.getText().trim())) {
       typeRepository.save(c);
       subscriber.triggerAction();
       FxUtilities.closeWindow(actionEvent);
+      return;
     }
+
+    c.setName(nameInput.getText().trim());
+    if (c.getName().isEmpty()) {
+      FxUtilities.createErrorWindow("Type name cannot be empty");
+      return;
+    }
+
+    if (typeRepository.findByName(c.getName()) != null) {
+      FxUtilities.createErrorWindow("Type with this name already exists");
+      return;
+    }
+    c.setName(nameInput.getText());
+    typeRepository.save(c);
+    subscriber.triggerAction();
+    FxUtilities.closeWindow(actionEvent);
   }
 
   public void cancelClicked(ActionEvent actionEvent) {

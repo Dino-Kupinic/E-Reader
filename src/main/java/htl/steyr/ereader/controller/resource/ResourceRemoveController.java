@@ -34,7 +34,7 @@ public class ResourceRemoveController implements Initializable, PublisherInterfa
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    deleteResourceList.getItems().addAll(resourceRepository.findAll());
+    deleteResourceList.getItems().addAll(resourceRepository.findAllByIsDeletedFalse());
   }
 
   @Override
@@ -50,7 +50,8 @@ public class ResourceRemoveController implements Initializable, PublisherInterfa
   public void onDeleteClicked(ActionEvent actionEvent) {
     Resource r = deleteResourceList.getSelectionModel().getSelectedItem();
     if (r != null) {
-      resourceRepository.delete(r);
+      r.setIsDeleted(true);
+      resourceRepository.save(r);
       subscriber.triggerAction();
     }
     FxUtilities.closeWindow(actionEvent);
