@@ -6,6 +6,7 @@ import htl.steyr.ereader.model.SubscriberInterface;
 import htl.steyr.ereader.repository.CategoryRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -19,8 +20,10 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class CategoryEditController implements Initializable, PublisherInterface {
-  public ListView<Category> editCategoryList;
-  public TextField nameInput;
+  @FXML
+  private ListView<Category> editCategoryList;
+  @FXML
+  private TextField nameInput;
 
   private SubscriberInterface subscriber = null;
   private final CategoryRepository categoryRepository;

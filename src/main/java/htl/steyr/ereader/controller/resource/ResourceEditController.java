@@ -6,6 +6,7 @@ import htl.steyr.ereader.repository.ResourceRepository;
 import htl.steyr.ereader.repository.TypeRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
@@ -20,11 +21,16 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class ResourceEditController implements Initializable, PublisherInterface {
-  public ListView<Resource> editResourceList;
-  public ComboBox<Category> categoryComboBox;
-  public ComboBox<Type> typeComboBox;
-  public TextField nameInput;
-  public TextField dailyRateInput;
+  @FXML
+  private ListView<Resource> editResourceList;
+  @FXML
+  private ComboBox<Category> categoryComboBox;
+  @FXML
+  private ComboBox<Type> typeComboBox;
+  @FXML
+  private TextField nameInput;
+  @FXML
+  private TextField dailyRateInput;
 
   private SubscriberInterface subscriber = null;
   private final ResourceRepository resourceRepository;

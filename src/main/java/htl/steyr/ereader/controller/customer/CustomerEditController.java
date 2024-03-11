@@ -6,6 +6,7 @@ import htl.steyr.ereader.model.SubscriberInterface;
 import htl.steyr.ereader.repository.CustomerRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -19,9 +20,12 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class CustomerEditController implements Initializable, PublisherInterface {
-  public TextField firstNameInput;
-  public TextField lastNameInput;
-  public ListView<Customer> editCustomerList;
+  @FXML
+  private TextField firstNameInput;
+  @FXML
+  private TextField lastNameInput;
+  @FXML
+  private ListView<Customer> editCustomerList;
 
   private SubscriberInterface subscriber = null;
   private final CustomerRepository customerRepository;

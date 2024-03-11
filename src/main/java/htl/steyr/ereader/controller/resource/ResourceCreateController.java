@@ -6,6 +6,7 @@ import htl.steyr.ereader.repository.ResourceRepository;
 import htl.steyr.ereader.repository.TypeRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -18,10 +19,14 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class ResourceCreateController implements Initializable, PublisherInterface {
-  public TextField nameInput;
-  public TextField dailyRate;
-  public ComboBox<Type> typeCombobox;
-  public ComboBox<Category> categoryCombobox;
+  @FXML
+  private TextField nameInput;
+  @FXML
+  private TextField dailyRate;
+  @FXML
+  private ComboBox<Type> typeCombobox;
+  @FXML
+  private ComboBox<Category> categoryCombobox;
 
   private SubscriberInterface subscriber = null;
   private final ResourceRepository resourceRepository;

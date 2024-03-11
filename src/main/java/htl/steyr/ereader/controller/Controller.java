@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -31,33 +32,62 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 @Component
 public class Controller implements Initializable {
-  public ComboBox<Customer> detailsCustomer;
-  public ComboBox<Resource> detailsResource;
-  public DatePicker detailsStart;
-  public DatePicker detailsEnd;
-  public TextField detailsResourceName;
-  public TextField detailsResourceCategory;
-  public TextField detailsResourceType;
-  public DatePicker borrowCreateStart;
-  public DatePicker borrowCreateEnd;
-  public TableView<Borrow> borrowTable;
-  public TableColumn<Borrow, Long> borrowTableId;
-  public TableColumn<Borrow, String> borrowTableResource;
-  public TableColumn<Borrow, String> borrowTableCustomer;
-  public TableColumn<Borrow, Date> borrowTableStart;
-  public TableColumn<Borrow, Date> borrowTableEnd;
-  public TableColumn<Borrow, Boolean> borrowTableIsReturned;
-  public TableView<Resource> resourceTable;
-  public TableColumn<Resource, String> resourceTableResource;
-  public TableColumn<Resource, Category> resourceTableCategory;
-  public TableColumn<Resource, Type> resourceTableType;
-  public ListView<Customer> returnBorrowList;
-  public ListView<Borrow> returnBorrowOpenBorrows;
-  public Label priceLabel;
-  public Label discountLabel;
-  public ComboBox<Category> categoryFilter;
-  public ComboBox<Type> typeFilter;
-  public TextField titleFilter;
+  @FXML
+  private ComboBox<Customer> detailsCustomer;
+  @FXML
+  private ComboBox<Resource> detailsResource;
+  @FXML
+  private DatePicker detailsStart;
+  @FXML
+  private DatePicker detailsEnd;
+  @FXML
+  private TextField detailsResourceName;
+  @FXML
+  private TextField detailsResourceCategory;
+  @FXML
+  private TextField detailsResourceType;
+  @FXML
+  private DatePicker borrowCreateStart;
+  @FXML
+  private DatePicker borrowCreateEnd;
+  @FXML
+  private TableView<Borrow> borrowTable;
+  @FXML
+  private TableColumn<Borrow, Long> borrowTableId;
+  @FXML
+  private TableColumn<Borrow, String> borrowTableResource;
+  @FXML
+  private TableColumn<Borrow, String> borrowTableCustomer;
+  @FXML
+  private TableColumn<Borrow, Date> borrowTableStart;
+  @FXML
+  private TableColumn<Borrow, Date> borrowTableEnd;
+  @FXML
+  private TableColumn<Borrow, Boolean> borrowTableIsReturned;
+  @FXML
+  private TableView<Resource> resourceTable;
+  @FXML
+  private TableColumn<Resource, String> resourceTableResource;
+  @FXML
+  private TableColumn<Resource, Category> resourceTableCategory;
+  @FXML
+  private TableColumn<Resource, Type> resourceTableType;
+  @FXML
+  private ListView<Customer> returnBorrowList;
+  @FXML
+  private ListView<Borrow> returnBorrowOpenBorrows;
+  @FXML
+  private Label priceLabel;
+  @FXML
+  private Label discountLabel;
+  @FXML
+  private ComboBox<Category> categoryFilter;
+  @FXML
+  private ComboBox<Type> typeFilter;
+  @FXML
+  private TextField titleFilter;
+  @FXML
+  private Label priceForDaysLabel;
 
   private final BorrowRepository borrowRepository;
   private final CustomerRepository customerRepository;
@@ -445,6 +475,7 @@ public class Controller implements Initializable {
         sum += b.getResource().getDailyRate();
         continue;
       }
+      priceForDaysLabel.setText("Price for " + daysBetween + " days");
       sum += daysBetween * b.getResource().getDailyRate();
       if (discountedRate != 0) {
         sum -= discountedRate;
@@ -460,6 +491,7 @@ public class Controller implements Initializable {
       returnBorrowOpenBorrows.getItems().clear();
       returnBorrowOpenBorrows.getItems().addAll(borrowRepository.findByCustomerAndIsReturned(c, false));
     }
+    priceForDaysLabel.setText("Price");
     priceLabel.setText("0.00€");
     discountLabel.setVisible(false);
   }

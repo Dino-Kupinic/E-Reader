@@ -6,6 +6,7 @@ import htl.steyr.ereader.model.SubscriberInterface;
 import htl.steyr.ereader.repository.CustomerRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,8 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class BorrowCreateController implements Initializable, PublisherInterface {
-  public ComboBox<Customer> customerCombobox;
+  @FXML
+  private ComboBox<Customer> customerCombobox;
 
   private SubscriberInterface subscriber = null;
   private final CustomerRepository customerRepository;

@@ -6,6 +6,7 @@ import htl.steyr.ereader.model.SubscriberInterface;
 import htl.steyr.ereader.repository.CategoryRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -19,8 +20,10 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class CategoryRemoveController implements Initializable, PublisherInterface {
-  public TextField selectedText;
-  public ListView<Category> deleteCategoryList;
+  @FXML
+  private TextField selectedText;
+  @FXML
+  private ListView<Category> deleteCategoryList;
 
   private SubscriberInterface subscriber = null;
   private final CategoryRepository categoryRepository;

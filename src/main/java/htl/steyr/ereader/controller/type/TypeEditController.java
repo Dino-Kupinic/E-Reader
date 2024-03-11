@@ -6,6 +6,7 @@ import htl.steyr.ereader.model.Type;
 import htl.steyr.ereader.repository.TypeRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -19,8 +20,10 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class TypeEditController implements Initializable, PublisherInterface {
-  public ListView<Type> editTypeList;
-  public TextField nameInput;
+  @FXML
+  private ListView<Type> editTypeList;
+  @FXML
+  private TextField nameInput;
 
   private SubscriberInterface subscriber = null;
   private final TypeRepository typeRepository;

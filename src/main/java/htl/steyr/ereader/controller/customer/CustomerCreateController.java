@@ -6,6 +6,7 @@ import htl.steyr.ereader.model.SubscriberInterface;
 import htl.steyr.ereader.repository.CustomerRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,10 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class CustomerCreateController implements Initializable, PublisherInterface {
-  public TextField firstNameInput;
-  public TextField lastNameInput;
+  @FXML
+  private TextField firstNameInput;
+  @FXML
+  private TextField lastNameInput;
 
   private SubscriberInterface subscriber = null;
   private final CustomerRepository customerRepository;

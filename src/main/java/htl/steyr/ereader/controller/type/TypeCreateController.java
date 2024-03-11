@@ -6,6 +6,7 @@ import htl.steyr.ereader.model.Type;
 import htl.steyr.ereader.repository.TypeRepository;
 import htl.steyr.ereader.util.FxUtilities;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,8 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 @Component
 public class TypeCreateController implements Initializable, PublisherInterface {
-  public TextField nameInput;
+  @FXML
+  private TextField nameInput;
 
   private SubscriberInterface subscriber = null;
   private final TypeRepository typeRepository;
