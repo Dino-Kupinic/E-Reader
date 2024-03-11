@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="htl.steyr.ereader.controller.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="htl.steyr.ereader.controller.Controller">
     <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Menu mnemonicParsing="false" text="Customers">
             <MenuItem mnemonicParsing="false" onAction="#manageCustomers" text="Create" />
@@ -66,7 +66,14 @@
         </Label>
     </AnchorPane>
     <AnchorPane layoutX="621.0" layoutY="325.0" prefHeight="380.0" prefWidth="335.0" style="-fx-border-color: #d1d1d1;" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="324.0" AnchorPane.topAnchor="325.0">
-      <AnchorPane layoutX="176.0" layoutY="4.0" prefHeight="146.0" prefWidth="155.0" style="-fx-border-color: #d1d1d1;" />
+      <AnchorPane layoutX="176.0" layoutY="4.0" prefHeight="146.0" prefWidth="155.0" style="-fx-border-color: #d1d1d1;">
+         <children>
+            <Label layoutX="8.0" layoutY="98.0" prefHeight="15.0" prefWidth="96.0" text="confirm with enter">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Label>
+         </children></AnchorPane>
         <DatePicker fx:id="borrowCreateStart" layoutX="11.0" layoutY="25.0" onAction="#calculateAvailableDates" prefHeight="26.0" prefWidth="141.0" />
         <DatePicker fx:id="borrowCreateEnd" layoutX="11.0" layoutY="72.0" onAction="#calculateAvailableDates" prefHeight="26.0" prefWidth="141.0" />
         <Label layoutX="11.0" layoutY="54.0" text="End" />
@@ -113,7 +120,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
     </TableView>
-    <Label layoutX="1049.0" layoutY="300.0" text="Return Borrow" AnchorPane.rightAnchor="120.0">
+    <Label layoutX="959.0" layoutY="300.0" text="Return Borrow" AnchorPane.rightAnchor="210.0">
         <font>
             <Font name="System Bold" size="16.0" />
         </font>
@@ -121,10 +128,10 @@
     <AnchorPane layoutX="1049.0" layoutY="325.0" prefHeight="380.0" prefWidth="315.0" style="-fx-border-color: #d1d1d1;" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="325.0">
         <ListView fx:id="returnBorrowList" layoutX="6.0" layoutY="24.0" onMouseClicked="#handleReturnBorrowListClicked" prefHeight="138.0" prefWidth="302.0" AnchorPane.topAnchor="23.0" />
         <Label layoutX="6.0" layoutY="6.0" text="Customer" />
-        <Label layoutX="6.0" layoutY="163.0" prefHeight="17.0" prefWidth="268.0" text="Open Borrows (select multiple with shift)" />
-        <ListView fx:id="returnBorrowOpenBorrows" layoutX="6.0" layoutY="180.0" onMouseClicked="#handleOpenBorrowsClicked" prefHeight="138.0" prefWidth="302.0" AnchorPane.bottomAnchor="66.0" AnchorPane.topAnchor="180.0" />
+        <Label layoutX="6.0" layoutY="167.0" prefHeight="17.0" prefWidth="268.0" text="Open Borrows (select multiple with shift)" />
+        <ListView fx:id="returnBorrowOpenBorrows" layoutX="6.0" layoutY="186.0" onMouseClicked="#handleOpenBorrowsClicked" prefHeight="138.0" prefWidth="302.0" AnchorPane.bottomAnchor="66.0" AnchorPane.topAnchor="186.0" />
         <Button layoutX="190.0" layoutY="341.0" mnemonicParsing="false" onAction="#borrowReturnClicked" prefHeight="25.0" prefWidth="111.0" text="Return" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-        <Label layoutX="6.0" layoutY="321.0" prefHeight="17.0" prefWidth="76.0" text="Price" AnchorPane.bottomAnchor="42.0" />
+        <Label fx:id="priceForDaysLabel" layoutX="6.0" layoutY="321.0" prefHeight="17.0" prefWidth="141.0" text="Price" AnchorPane.bottomAnchor="43.0" />
         <Label fx:id="priceLabel" layoutX="6.0" layoutY="337.0" prefHeight="32.0" prefWidth="173.0" text="0.00€" AnchorPane.bottomAnchor="11.0">
             <font>
                 <Font name="System Bold" size="19.0" />
