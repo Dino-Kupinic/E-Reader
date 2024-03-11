@@ -9,7 +9,13 @@ Library Management software for managing books, DVD, etc.
 ```bash
 git clone https://github.com/Dino-Kupinic/E-Reader.git
 ```
-2. WIP
+
+> [!NOTE]
+> This guide assumes you use [IntelliJ IDEA](https://www.jetbrains.com/idea/)
+
+2. Open the project in IntelliJ
+3. Choose a SDK (preferably Java 21)
+4. Click on the green button in the top right
 
 ## 😉 Author
 
