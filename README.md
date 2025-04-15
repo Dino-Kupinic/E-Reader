@@ -1,5 +1,8 @@
 # E-Reader
+
 Library Management software for managing books, DVD, etc. 
+
+![preview](./.github/preview.png)
 
 > [!CAUTION]
 > E-Reader is still in Development. You will find bugs and broken/unfinished features.
